@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../dist/vue.global.js"></script>
+  <script>
+    const { createApp, onMounted, ref, toRefs, onUnmounted, reactive } = Vue
+
+    const useMouse = function() {
+      const state = reactive({
+        x: 0,
+        y: 0,
+      })
+
+      function update(e) {
+        state.x = e.clientX
+        state.y = e.clientY
+      }
+      
+      onMounted(() => {
+        window.addEventListener('mousemove', update)
+      })
+
+      onUnmounted(() => {
+        window.removeEventListener('mousemove', update)
+      })
+
+      return {
+        ...toRefs(state)
+      }
+    }
+
+    const app = createApp({
+      template: `
+        <p>{{x}}</p>
+        <p>{{y}}</p>
+      `,
+      setup() {
+        const {x, y} = useMouse()
+
+        return {
+          x, y
+        }
+      }
+
+    }).mount('#app')
+  </script>
+</body>
+</html>

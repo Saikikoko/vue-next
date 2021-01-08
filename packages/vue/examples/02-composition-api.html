@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1 @click="onClick">{{message}}</h1>
+    <p>{{reverseMsg}}</p>
+    <p @click="add">{{counter}}</p>
+  </div>
+  <script src="../dist/vue.global.js"></script>
+  <script>
+    const { createApp, reactive, computed, onMounted, ref, toRefs } = Vue;
+
+    const app = createApp({
+      setup() {
+        const state = reactive({
+          message: 'hello Vue3',
+          reverseMsg: computed(() => state.message.split('').reverse().join(''))
+        })
+        
+        // 单值响应式
+        const counter = ref(0)
+        
+        function onClick() {
+          // console.log('this is vue3')
+          state.message = state.message.split('').reverse().join('')
+        }
+
+        function add() {
+          counter.value++;
+        }
+
+        onMounted(() => {
+          console.log('mounted')
+        })
+        return {
+          ...toRefs(state),
+          onClick,
+          counter,
+          add
+        }
+      }
+    })
+
+    app.mount('#app');
+
+    console.log(app)
+  </script>
+</body>
+</html>
